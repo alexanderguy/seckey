@@ -1,0 +1,79 @@
+* Specifications
+
+  - MFA/2FA
+  - ssh-agent/gpg-agent
+  - Shows a hash of thing to be signed on display.
+  - Can act as an encrypted flash drive.
+  - Shows when an agent request is received, and requests verification of the user.
+
+* Parts/BoM
+
+  - Programming
+    TAG interface onboard.
+
+  - Display
+
+    OLED .. something small.  Character display is ok.  Pixel access or
+    custom characters are a nice to have.
+    
+    Possible parts:
+
+    - EA W096016-XALW 
+      Probably too small for our use case.
+      
+    - EA W128032-XALG 
+
+      Seems like a decent size, but the cable out the bottom might
+      make it too big.  It depends if it can be folded over or not.
+      FPC bend min ~2mm horizontal, 1.5 vertical
+      I2C, SPI, or 8 bit interface (6800, 8000).
+
+  - Input
+
+    Some form of D-Pad or button toggle, with an enter press.  Sounds like a "navigation switch".
+    
+    Possible Parts:
+
+    - Alps SKRH
+      Surface mount.  Available with guide bosses or without.  4 directions, with center push.
+      
+  - Processor
+
+    It seems like the deal breaker is if we want to be a USB OTG or a
+    USB device only.  Besides that it looks like the STM32L5 has some
+    more "security" features, which may or may not be used, because
+    we should be implementing most of our security features in software
+    regardless of the hardware we're running on.
+
+    The ultimate is we could move to any processor, maybe even a custom
+    FPGA-implementation of a purpose-built crypto/enclave/thing.
+
+    - STM32L4P
+
+      Cortex-M4. Has OTG USB and memory interface.  Brand new, so
+      smaller parts availability might end up sucking.
+
+      - STM32L4P5G-DK available.  Has eMMC, and a 4way+press button.
+        Parts available at Mouser are BGAs with 169 pins, which might
+        be a total pain in the ass to route.
+
+	The BGA is super tiny, but it'd mean a smaller board with all
+	sorts of functionality.
+
+      - NUCLEO-L4P5ZG Doesn't have any real peripherals onboard, but
+        has a bunch of exposed pins like a typical nucleo board.
+
+
+
+    - STM32L5 
+      
+      Cortex-M33. Possibly the STM32L562.  Newer part. Brand new, so
+      smaller parts availability might end up sucking.  There's
+      USB-C support built into, and it has some switched mode
+      power supply functionality, that I don't totally understand.
+
+      ST makes a development board called the STM32L562E-DK for $75.
+
+      It might be the STM32L562CET6 that is the right choice. It's
+      a LQFP48, which means it's easy to solder.  We just need to
+      make sure it has enough pins to do the job.
